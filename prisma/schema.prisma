@@ -13,3 +13,22 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+// In prisma/schema.prisma
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  level     Int      @default(1)
+  xp        Int      @default(0)
+  tasks     Task[]
+  // ... other fields
+}
+
+model Task {
+  id          String   @id @default(cuid())
+  title       String
+  isComplete  Boolean  @default(false)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+}
